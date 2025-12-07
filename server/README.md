@@ -1,6 +1,15 @@
 # Privet Server
 
-Backend сервер для мессенджера Privet. Хранение медиафайлов и push-уведомления через APNs.
+Backend сервер для мессенджера Privet с username-based авторизацией. Хранение медиафайлов и push-уведомления через APNs.
+
+## Особенности
+
+- Username + password авторизация (без номера телефона/email)
+- PostgreSQL база данных
+- WebSocket для real-time сообщений
+- JWT токены
+- Собственное хранилище медиа
+- APNs push-уведомления
 
 ## Установка
 
