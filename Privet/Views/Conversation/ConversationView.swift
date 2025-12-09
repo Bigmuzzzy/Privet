@@ -91,14 +91,14 @@ struct ConversationView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack(spacing: 16) {
                     Button(action: {
-                        // TODO: Видеозвонок
+                        startVideoCall()
                     }) {
                         Image(systemName: "video.fill")
                             .foregroundColor(.whatsAppGreen)
                     }
 
                     Button(action: {
-                        // TODO: Аудиозвонок
+                        startAudioCall()
                     }) {
                         Image(systemName: "phone.fill")
                             .foregroundColor(.whatsAppGreen)
@@ -122,6 +122,48 @@ struct ConversationView: View {
         guard let lastMessage = viewModel.messages.last else { return }
         withAnimation(.easeOut(duration: 0.2)) {
             proxy.scrollTo(lastMessage.id, anchor: .bottom)
+        }
+    }
+
+    private func startAudioCall() {
+        guard let recipientId = viewModel.chat.otherUser?.id,
+              let recipientName = viewModel.chat.otherUser?.displayName,
+              let chatId = viewModel.chat.id else {
+            return
+        }
+
+        Task {
+            do {
+                try await CallManager.shared.startCall(
+                    to: recipientId,
+                    userName: recipientName,
+                    chatId: chatId,
+                    type: .audio
+                )
+            } catch {
+                print("Failed to start audio call: \(error)")
+            }
+        }
+    }
+
+    private func startVideoCall() {
+        guard let recipientId = viewModel.chat.otherUser?.id,
+              let recipientName = viewModel.chat.otherUser?.displayName,
+              let chatId = viewModel.chat.id else {
+            return
+        }
+
+        Task {
+            do {
+                try await CallManager.shared.startCall(
+                    to: recipientId,
+                    userName: recipientName,
+                    chatId: chatId,
+                    type: .video
+                )
+            } catch {
+                print("Failed to start video call: \(error)")
+            }
         }
     }
 }

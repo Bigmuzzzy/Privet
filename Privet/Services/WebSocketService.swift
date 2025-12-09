@@ -18,6 +18,13 @@ class WebSocketService: ObservableObject {
     let onlineStatusPublisher = PassthroughSubject<(userId: String, isOnline: Bool, lastSeen: Date?), Never>()
     let messageDeletedPublisher = PassthroughSubject<String, Never>()
 
+    // WebRTC Call Publishers
+    let incomingCallPublisher = PassthroughSubject<(callerId: String, offer: String, callType: String, chatId: String), Never>()
+    let callAnsweredPublisher = PassthroughSubject<(answerId: String, answer: String), Never>()
+    let iceCandidatePublisher = PassthroughSubject<(senderId: String, candidate: [String: Any]), Never>()
+    let callEndedPublisher = PassthroughSubject<(userId: String, reason: String?), Never>()
+    let callRejectedPublisher = PassthroughSubject<(userId: String, reason: String?), Never>()
+
     private var webSocket: URLSessionWebSocketTask?
     private var pingTimer: Timer?
     private var reconnectAttempts = 0
@@ -143,6 +150,39 @@ class WebSocketService: ObservableObject {
                 }
             }
 
+        // WebRTC Call Events
+        case "incoming_call":
+            if let callerId = json["callerId"] as? String,
+               let offer = json["offer"] as? String,
+               let callType = json["callType"] as? String,
+               let chatId = json["chatId"] as? String {
+                incomingCallPublisher.send((callerId, offer, callType, chatId))
+            }
+
+        case "call_answered":
+            if let answerId = json["answerId"] as? String,
+               let answer = json["answer"] as? String {
+                callAnsweredPublisher.send((answerId, answer))
+            }
+
+        case "ice_candidate":
+            if let senderId = json["senderId"] as? String,
+               let candidate = json["candidate"] as? [String: Any] {
+                iceCandidatePublisher.send((senderId, candidate))
+            }
+
+        case "call_ended":
+            if let userId = json["userId"] as? String {
+                let reason = json["reason"] as? String
+                callEndedPublisher.send((userId, reason))
+            }
+
+        case "call_rejected":
+            if let userId = json["userId"] as? String {
+                let reason = json["reason"] as? String
+                callRejectedPublisher.send((userId, reason))
+            }
+
         default:
             print("WebSocket: Unknown message type: \(type)")
         }
@@ -190,7 +230,8 @@ class WebSocketService: ObservableObject {
         ])
     }
 
-    private func send(_ dict: [String: Any]) {
+    // Public send method for other services (like CallManager)
+    func send(_ dict: [String: Any]) {
         guard let data = try? JSONSerialization.data(withJSONObject: dict),
               let text = String(data: data, encoding: .utf8) else {
             return

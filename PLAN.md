@@ -42,6 +42,9 @@ Privet/
 │   │   ├── MessageBubbleView.swift
 │   │   ├── MessageInputView.swift
 │   │   └── MediaPickerView.swift
+│   ├── Calls/
+│   │   ├── IncomingCallView.swift
+│   │   └── ActiveCallView.swift
 │   ├── Settings/
 │   │   └── SettingsView.swift
 │   └── Components/
@@ -56,7 +59,9 @@ Privet/
 │   ├── AuthService.swift
 │   ├── ChatService.swift
 │   ├── MediaService.swift
-│   └── PushNotificationService.swift
+│   ├── PushNotificationService.swift
+│   ├── CallManager.swift          # WebRTC управление звонками
+│   └── CallKitManager.swift       # CallKit интеграция
 └── Extensions/
     ├── Color+Extensions.swift
     └── Date+Extensions.swift
@@ -141,6 +146,16 @@ server/
 - [x] Регистрация device token
 - [x] Обработка входящих уведомлений
 
+### Голосовые/видеозвонки (WebRTC)
+- [x] WebRTC signaling на сервере (websocket.js)
+- [x] CallManager с WebRTC peer connection
+- [x] CallKit интеграция для нативного UI
+- [x] IncomingCallView - экран входящего звонка
+- [x] ActiveCallView - экран активного звонка
+- [x] Кнопки звонков в ConversationView
+- [x] Управление аудио (mute, speaker)
+- [ ] Рендеринг видео (для видеозвонков)
+
 ---
 
 ## Запланированные задачи
@@ -157,12 +172,14 @@ server/
 - [ ] Воспроизведение в чате
 
 ### Голосовые и видеозвонки
-- [ ] WebRTC интеграция
-- [ ] Signaling через WebSocket
-- [ ] UI входящего звонка
-- [ ] UI активного звонка
-- [ ] Управление камерой/микрофоном
-- [ ] CallKit интеграция
+- [x] WebRTC интеграция
+- [x] Signaling через WebSocket
+- [x] UI входящего звонка
+- [x] UI активного звонка
+- [x] Управление камерой/микрофоном (аудио)
+- [x] CallKit интеграция
+- [ ] Рендеринг видео для видеозвонков
+- [ ] Переключение камер
 
 ### Групповые чаты
 - [ ] Создание группы

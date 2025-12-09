@@ -41,6 +41,9 @@ Privet/
 │   │   ├── MessageBubbleView.swift
 │   │   ├── MessageInputView.swift
 │   │   └── MediaPickerView.swift
+│   ├── Calls/
+│   │   ├── IncomingCallView.swift
+│   │   └── ActiveCallView.swift
 │   ├── Settings/
 │   │   └── SettingsView.swift
 │   └── Components/
@@ -51,11 +54,13 @@ Privet/
 │   └── ConversationViewModel.swift
 ├── Services/
 │   ├── APIClient.swift              # HTTP client with JWT
-│   ├── WebSocketService.swift       # Real-time updates
+│   ├── WebSocketService.swift       # Real-time updates & WebRTC signaling
 │   ├── AuthService.swift            # Authentication
 │   ├── ChatService.swift            # Chats & messages
 │   ├── MediaService.swift           # Upload to server
-│   └── PushNotificationService.swift # APNs
+│   ├── PushNotificationService.swift # APNs
+│   ├── CallManager.swift            # WebRTC call management
+│   └── CallKitManager.swift         # CallKit integration
 ├── Extensions/
 │   ├── Color+Extensions.swift
 │   └── Date+Extensions.swift
@@ -228,11 +233,17 @@ npm run dev
 - [x] Push notification infrastructure (APNs)
 - [x] Photo sending via custom server
 - [x] Username-based authentication (no phone/email required)
+- [x] WebRTC infrastructure for voice/video calls
+- [x] CallKit integration for native iOS call experience
+- [x] Audio call UI (IncomingCallView, ActiveCallView)
+
+### In Progress
+- [ ] Video calls (WebRTC infrastructure ready, needs video rendering)
+- [ ] Testing and debugging calls
 
 ### Pending
 - [ ] Video sending
 - [ ] Voice messages
-- [ ] Voice/video calls (WebRTC)
 - [ ] Group chats
 
 ## Deployment

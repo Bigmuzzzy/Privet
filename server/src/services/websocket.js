@@ -96,6 +96,27 @@ class WebSocketManager {
           this.handleReadReceipts(ws.userId, message.messageIds);
           break;
 
+        // WebRTC Signaling
+        case 'call_offer':
+          this.handleCallOffer(ws.userId, message);
+          break;
+
+        case 'call_answer':
+          this.handleCallAnswer(ws.userId, message);
+          break;
+
+        case 'ice_candidate':
+          this.handleIceCandidate(ws.userId, message);
+          break;
+
+        case 'call_end':
+          this.handleCallEnd(ws.userId, message);
+          break;
+
+        case 'call_reject':
+          this.handleCallReject(ws.userId, message);
+          break;
+
         default:
           console.log('Unknown message type:', message.type);
       }
@@ -229,6 +250,67 @@ class WebSocketManager {
     } catch (error) {
       console.error('Broadcast to chat error:', error);
     }
+  }
+
+  // WebRTC Signaling handlers
+  handleCallOffer(callerId, message) {
+    const { recipientId, offer, callType, chatId } = message;
+
+    console.log(`📞 Call offer from ${callerId} to ${recipientId} (${callType})`);
+
+    this.sendToUser(recipientId, {
+      type: 'incoming_call',
+      callerId,
+      offer,
+      callType, // 'audio' or 'video'
+      chatId
+    });
+  }
+
+  handleCallAnswer(answerId, message) {
+    const { callerId, answer } = message;
+
+    console.log(`✅ Call answered by ${answerId} to ${callerId}`);
+
+    this.sendToUser(callerId, {
+      type: 'call_answered',
+      answerId,
+      answer
+    });
+  }
+
+  handleIceCandidate(userId, message) {
+    const { recipientId, candidate } = message;
+
+    this.sendToUser(recipientId, {
+      type: 'ice_candidate',
+      senderId: userId,
+      candidate
+    });
+  }
+
+  handleCallEnd(userId, message) {
+    const { recipientId, reason } = message;
+
+    console.log(`📵 Call ended by ${userId}, reason: ${reason || 'normal'}`);
+
+    this.sendToUser(recipientId, {
+      type: 'call_ended',
+      userId,
+      reason: reason || 'normal'
+    });
+  }
+
+  handleCallReject(userId, message) {
+    const { callerId, reason } = message;
+
+    console.log(`❌ Call rejected by ${userId}`);
+
+    this.sendToUser(callerId, {
+      type: 'call_rejected',
+      userId,
+      reason: reason || 'busy'
+    });
   }
 
   // Heartbeat to detect dead connections
