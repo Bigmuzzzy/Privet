@@ -19,11 +19,14 @@ class WebSocketService: ObservableObject {
     let messageDeletedPublisher = PassthroughSubject<String, Never>()
 
     // WebRTC Call Publishers
+    // TODO: Uncomment when WebRTC is properly configured
+    /*
     let incomingCallPublisher = PassthroughSubject<(callerId: String, offer: String, callType: String, chatId: String), Never>()
     let callAnsweredPublisher = PassthroughSubject<(answerId: String, answer: String), Never>()
     let iceCandidatePublisher = PassthroughSubject<(senderId: String, candidate: [String: Any]), Never>()
     let callEndedPublisher = PassthroughSubject<(userId: String, reason: String?), Never>()
     let callRejectedPublisher = PassthroughSubject<(userId: String, reason: String?), Never>()
+    */
 
     private var webSocket: URLSessionWebSocketTask?
     private var pingTimer: Timer?
@@ -151,6 +154,8 @@ class WebSocketService: ObservableObject {
             }
 
         // WebRTC Call Events
+        // TODO: Uncomment when WebRTC is properly configured
+        /*
         case "incoming_call":
             if let callerId = json["callerId"] as? String,
                let offer = json["offer"] as? String,
@@ -182,6 +187,7 @@ class WebSocketService: ObservableObject {
                 let reason = json["reason"] as? String
                 callRejectedPublisher.send((userId, reason))
             }
+        */
 
         default:
             print("WebSocket: Unknown message type: \(type)")

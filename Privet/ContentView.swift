@@ -9,9 +9,21 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject private var authService = AuthService.shared
-    @ObservedObject private var callManager = CallManager.shared
+    // TODO: Uncomment when WebRTC is properly configured
+    // @ObservedObject private var callManager = CallManager.shared
 
     var body: some View {
+        Group {
+            if authService.isAuthenticated {
+                MainTabView()
+            } else {
+                LoginView()
+            }
+        }
+        .animation(.easeInOut, value: authService.isAuthenticated)
+
+        // TODO: Uncomment call overlays when WebRTC is ready
+        /*
         ZStack {
             // Main app view
             Group {
@@ -43,6 +55,7 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut, value: callManager.callState)
+        */
     }
 }
 

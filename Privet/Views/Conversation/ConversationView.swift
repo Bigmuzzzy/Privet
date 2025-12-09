@@ -126,6 +126,9 @@ struct ConversationView: View {
     }
 
     private func startAudioCall() {
+        // TODO: Implement when WebRTC is properly configured
+        print("Audio call feature coming soon - WebRTC configuration needed")
+        /*
         guard let recipientId = viewModel.chat.otherUser?.id,
               let recipientName = viewModel.chat.otherUser?.displayName,
               let chatId = viewModel.chat.id else {
@@ -144,9 +147,13 @@ struct ConversationView: View {
                 print("Failed to start audio call: \(error)")
             }
         }
+        */
     }
 
     private func startVideoCall() {
+        // TODO: Implement when WebRTC is properly configured
+        print("Video call feature coming soon - WebRTC configuration needed")
+        /*
         guard let recipientId = viewModel.chat.otherUser?.id,
               let recipientName = viewModel.chat.otherUser?.displayName,
               let chatId = viewModel.chat.id else {
@@ -165,6 +172,7 @@ struct ConversationView: View {
                 print("Failed to start video call: \(error)")
             }
         }
+        */
     }
 }
 
